@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FollowCarnage : MonoBehaviour {
+public class FollowBait : MonoBehaviour {
 
+	public enum TypeOfCarnage{candy ,money,bait3};
+	//public TypeOfCarnage fishCarnage;
+	public TypeOfCarnage peopleCarnage;
 	private Transform target;
-	//public Transform myTransform;
 	private Transform myTransform;
 	public float moveSpeed=1.5f;
 	public float range=3;
@@ -19,26 +21,32 @@ public class FollowCarnage : MonoBehaviour {
 		myTransform = this.transform;
 	}
 
-	void Start () {
-		target = GameObject.FindGameObjectWithTag ("Carnage").transform;
+	void Start () {				
+
+		target = GameObject.FindGameObjectWithTag ("bait").transform;
+		//target = GameObject.Find ("Carnage").transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		distance = Vector2.Distance (myTransform.position, target.position);
-	
-		if (distance <= range && distance > stopDistance && hooked==false) { 
-			//move to the player
-			myTransform.position += (target.position - myTransform.position) * moveSpeed * Time.deltaTime;
-		} 
+		if (target.name == peopleCarnage.ToString()) {
 
-		if (distance <= stopDistance && !joined) {    
-			hooked=true;
-			joined = true;
-			// joint to carnage
-			dj2d = gameObject.AddComponent<DistanceJoint2D>(  ) as DistanceJoint2D;
-			dj2d.connectedBody = target.GetComponent<Rigidbody2D>();
-			dj2d.distance = 0.2f;
-		}   
+			distance = Vector2.Distance (myTransform.position, target.position);
+	
+			if (distance <= range && distance > stopDistance && hooked == false) { 
+				//move to the player
+				myTransform.position += (target.position - myTransform.position) * moveSpeed * Time.deltaTime;
+			} 
+
+
+			if (distance <= stopDistance && !joined) {    
+				hooked = true;
+				joined = true;
+				// joint to carnage
+				dj2d = gameObject.AddComponent<DistanceJoint2D> () as DistanceJoint2D;
+				dj2d.connectedBody = target.GetComponent<Rigidbody2D> ();
+				dj2d.distance = 0.2f;
+			}   
+		}
 	}
 }
