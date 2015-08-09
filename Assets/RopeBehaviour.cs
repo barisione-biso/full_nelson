@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,7 +18,7 @@ public class RopeBehaviour : MonoBehaviour {
 	public bool shoot = false;
 	
 	private GameObject lastLink;
-
+	
 	private Rigidbody2D rigidbody;
 	
 	// Use this for initialization
@@ -26,24 +26,20 @@ public class RopeBehaviour : MonoBehaviour {
 		linkList = new List<GameObject>();
 		lane = transform.position.y;
 		this.rigidbody = GetComponent<Rigidbody2D> ();
-
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate(){
-
 		
 	}
-	void Update () {
-		if(shoot){
-			Bait.GetComponent<Rigidbody2D>().gravityScale = 1;
-			Bait.GetComponent<Rigidbody2D>().AddForce (new Vector2(-1,1)*600);
-			shooting = true;
-			shoot = false;
-			
-		}
+	
+	 
+
+	void Start()
+	{
+		this.Shoot(Vector2.zero,0);
+
+	}
+	void FixedUpdate () {
+		 
 		if(shooting){
-			/*if(Bait.GetComponent<Rigidbody2D>().position.y <= lane){
+			 if(Bait.GetComponent<Rigidbody2D>().position.y <= lane){
 				shooting = false;
 				Bait.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 				Bait.GetComponent<Rigidbody2D>().gravityScale = 0;
@@ -55,7 +51,7 @@ public class RopeBehaviour : MonoBehaviour {
 				}
 				return;
 			}
-			*/
+			 
 			Vector2 midPosition;
 			Vector2 currentDistance;
 			if(linkList.Count == 0){
@@ -72,12 +68,10 @@ public class RopeBehaviour : MonoBehaviour {
 			
 			if(Vector2.Distance(Bait.GetComponent<Rigidbody2D>().position,currentDistance)>=linkDistance){
 				print("ok"+midPosition);
-				GameObject newLink = (GameObject) Instantiate(LinkPrefab,new Vector3(500,100,0),Quaternion.identity);
-				//newLink.transform.position=new Vector3(500,100,0);
-				//newLink.transform.rotation=Quaternion.identity;
-				
+				GameObject newLink = (GameObject) Instantiate(LinkPrefab,midPosition,Quaternion.identity);
+
 				print ("no"+newLink.transform.position);
-				//newLink.GetComponent<HingeJoint2D>().connectedBody = lastLink.GetComponent<Rigidbody2D>();
+				newLink.GetComponent<HingeJoint2D>().connectedBody = lastLink.GetComponent<Rigidbody2D>();
 				linkList.Add(newLink);
 			}
 		}
@@ -85,6 +79,10 @@ public class RopeBehaviour : MonoBehaviour {
 	}
 	
 	void Shoot(Vector2 force, float lane){
+		Bait.GetComponent<Rigidbody2D>().gravityScale = 1;
+		Bait.GetComponent<Rigidbody2D>().AddForce (new Vector2(-1,1)*300);
+		shooting = true;
+		shoot = false;
 		
 	}
 	void Pull(){
@@ -95,4 +93,3 @@ public class RopeBehaviour : MonoBehaviour {
 		
 	}
 	
-}
